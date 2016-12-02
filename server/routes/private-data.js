@@ -3,6 +3,44 @@ var router = express.Router();
 var User = require('../models/user');
 var Secret = require('../models/secret');
 
+router.post('/', function(req, res) {
+  console.log('post: ', req.body);
+  console.log('Decoded Token: ', req.decodedToken);
+
+  var userEmail = req.decodedToken.email;
+  User.findOne({ email: userEmail }, function (err, user) {
+    if (err) {
+      console.log('Error COMPLETING clearanceLevel query task', err);
+      res.sendStatus(500);
+    } else {
+      console.log(user);
+      if (user == null) {
+        console.log('No user found with that email. Have you added this person to the database? Email: ', req.decodedToken.email);
+        res.sendStatus(403);
+      } else {
+        if (user.clearanceLevel >= req.body.clearanceLevel) {
+          var addedPerson = new User(req.body);
+          console.log(addedPerson);
+          addedPerson.save(function(err, data) {
+            console.log('save data:', data);
+            if(err) {
+              console.log('ERR: ', err);
+              res.sendStatus(500);
+            } else {
+              res.sendStatus(201);
+            }
+          });
+        } else {
+          console.log("User doesn't have the clearance Level for this");
+        }
+      }
+    }
+  })
+
+
+});
+
+
 router.get("/", function(req, res){
   var userEmail = req.decodedToken.email;
   // Check the user's level of permision based on their email

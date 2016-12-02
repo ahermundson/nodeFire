@@ -2,7 +2,12 @@ var app = angular.module("sampleApp", ["firebase"]);
 app.controller("SampleCtrl", function($firebaseAuth, $http) {
   var auth = $firebaseAuth();
   var self = this;
+  var currentUser = {};
 
+  self.newUser = {
+    email: '',
+    clearanceLevel: 0
+  }
   // This code runs whenever the user logs in
   self.logIn = function(){
     auth.$signInWithPopup("google").then(function(firebaseUser) {
@@ -19,6 +24,7 @@ app.controller("SampleCtrl", function($firebaseAuth, $http) {
   auth.$onAuthStateChanged(function(firebaseUser){
     // firebaseUser will be null if not logged in
     if(firebaseUser) {
+      currentUser = firebaseUser;
       // This is where we make our call to our server
       firebaseUser.getToken().then(function(idToken){
         $http({
@@ -38,10 +44,27 @@ app.controller("SampleCtrl", function($firebaseAuth, $http) {
 
   });
 
+
   // This code runs when the user logs out
   self.logOut = function(){
     auth.$signOut().then(function(){
       console.log('Logging the user out!');
     });
   };
+
+  self.addPerson = function() {
+    console.log(currentUser);
+    currentUser.getToken().then(function(idToken) {
+      $http({
+        method: 'POST',
+        url: '/privateData',
+        data: self.newUser,
+        headers: {
+          id_token: idToken
+        }
+      }).then(function(response) {
+      console.log("Failed to post new user");
+    });
+  });
+}
 });

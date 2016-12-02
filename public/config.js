@@ -31,11 +31,11 @@
 
 /////////////////////////////////////////////////////////
 // Initialize Firebase
-var config = {
-  apiKey: "AIzaSyAU9OZTcXLQpS0VheZz7Xy-UpqLGBKlXlY",
-  authDomain: "sigma-test-run.firebaseapp.com",
-  databaseURL: "https://sigma-test-run.firebaseio.com",
-  storageBucket: "sigma-test-run.appspot.com",
-  messagingSenderId: "279228406571"
-};
-firebase.initializeApp(config);
+  var config = {
+    apiKey: "AIzaSyAshe9XDUsWKKoQdFuvjUOqfyKJCRqa758",
+    authDomain: "nodefire-ed86e.firebaseapp.com",
+    databaseURL: "https://nodefire-ed86e.firebaseio.com",
+    storageBucket: "nodefire-ed86e.appspot.com",
+    messagingSenderId: "793365257768"
+  };
+  firebase.initializeApp(config);
